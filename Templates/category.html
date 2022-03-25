@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+        Welcome to MyKart store! One Stop for All Shopping...
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{ category.name }} - MyKart
+    {% else %}
+        MyKart - The sale is on!!!
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<!--    {% if category %}-->
+<!--        <div>-->
+<!--            <div class="row my_row_class">-->
+<!--                <div class="mx-auto">-->
+<!--                    <p><a href="{% url 'mykart:allProducts' %}">Our Product Collection</a> </p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    {% endif %}-->
+    <div>
+        {% if category %}
+<!--        <img src="{{category.image.url}}" alt="{{category.name}}" width="800" height="400">-->
+<!--    </div><br>-->
+<!--    <div>-->
+<!--        <h1>{{category.name}}</h1>-->
+<!--        <p>{{category.description}}</p>-->
+<!--    </div>-->
+        <section class="hero">
+          <div class="hero__image-wrapper">
+            <img id="hero__image" src="{{category.image.url}}" alt="{{category.name}}" />
+          </div>
+          <div class="hero__text">
+            <h1>{{category.name}}</h1>
+            <p>{{category.description}}</p>
+          </div>
+        </section>
+
+        {% else %}
+    <div>
+        <img src="{% static 'img/banner.png' %}" alt="Our Collections">
+    </div><br>
+    <div>
+        <h1>Our Collections</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam aliquid, architecto dolore doloremque eos eum facere illo libero magni optio provident quas rerum similique suscipit, unde! Ea eaque quisquam quos?</p>
+    </div>
+        {% endif %}
+        <br><br>
+    <div class="row">
+        {% for product in products.object_list %}
+            <div class="col-12 col-md-4 mb-2 justify-content-center">
+                <div class="card" style="width: 18rem; margin: 0 auto;">
+                    <a href="{{product.get_url}}"><img src="{{product.image.url}}" class="card-img-top" alt="{{product.name}}" width="300" height="350"></a>
+                      <div class="card-body">
+                        <h5 class="card-title">{{product.name}}</h5>
+                        <p class="card-text">₹{{product.price}}</p>
+<!--                        <p class="card-text">{{product.description}}</p>-->
+                        <div class="text-center">
+                            <a class="btn btn-primary" href="{{product.get_url}}" role="button">More Info</a>
+                        </div>
+                      </div>
+                </div><br>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        {% if products.paginator.num_pages > 1 %}
+          <hr>
+            <div class="text-center">
+              {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+              {% endfor %}
+            </div>
+        {% endif %}
+    </div> <br>
+</div>
+{% endblock %}
